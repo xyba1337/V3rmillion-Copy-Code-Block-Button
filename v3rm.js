@@ -25,11 +25,14 @@
         let codeblockInner = item.children[1].firstChild.textContent;
 
         zNode.onclick = function() {
-            navigator.clipboard.writeText(codeblockInner);
-            var newNode = document.createElement ('p');
-            newNode.innerHTML = 'Code Copied!';
-            zNode.appendChild(newNode);
-            setTimeout(() => zNode.removeChild(zNode.childNodes[1]), 1500);
+            if (navigator.clipboard.writeText(codeblockInner)) {
+                var newNode = document.createElement ('p');
+                newNode.innerHTML = 'Code Copied!';
+                zNode.appendChild(newNode);
+                setTimeout(() => zNode.removeChild(zNode.childNodes[1]), 1500);
+            } else {
+                alert("something went wrong");
+            }
         }
     }
 
