@@ -20,16 +20,20 @@
         zNode.innerHTML = '<button id="myButton" type="button">'
             + 'Copy Code</button>'
         ;
-        zNode.setAttribute ('id', 'myContainer');
+        zNode.setAttribute('id', 'myContainer');
         item.appendChild(zNode);
         let codeblockInner = item.children[1].firstChild.innerText.replace(new RegExp(String.fromCharCode(160), "g"), " ");
 
         zNode.onclick = function() {
             if (navigator.clipboard.writeText(codeblockInner)) {
-                var newNode = document.createElement ('p');
-                newNode.innerHTML = 'Code Copied!';
-                zNode.appendChild(newNode);
-                setTimeout(() => zNode.removeChild(zNode.childNodes[1]), 1500);
+                var StatusNode = document.getElementById("status");
+                if (!StatusNode) {
+                    var newNode = document.createElement('p');
+                    newNode.id = "status";
+                    newNode.innerHTML = 'Code Copied!';
+                    zNode.appendChild(newNode);
+                }
+                setTimeout(() => $(zNode.childNodes[1]).fadeOut(500, function() { $(this).remove(); }), 500);
             } else {
                 alert("something went wrong");
             }
