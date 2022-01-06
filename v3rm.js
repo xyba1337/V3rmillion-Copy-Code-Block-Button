@@ -22,7 +22,7 @@
         ;
         zNode.setAttribute ('id', 'myContainer');
         item.appendChild(zNode);
-        let codeblockInner = item.children[1].firstChild.textContent;
+        let codeblockInner = item.children[1].firstChild.innerText.replace(new RegExp(String.fromCharCode(160), "g"), " ");
 
         zNode.onclick = function() {
             if (navigator.clipboard.writeText(codeblockInner)) {
