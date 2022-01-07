@@ -66,7 +66,7 @@
             if (!StatusNode) {
                 var newNode = document.createElement('p');
                 newNode.id = "status";
-                newNode.innerHTML = 'Code ' + message + ' !';
+                newNode.innerHTML = 'Code ' + message + '!';
                 zNode.appendChild(newNode);
             }
             setTimeout(() => $(zNode.childNodes[2]).fadeOut(500, function() { $(this).remove(); }), 500);
