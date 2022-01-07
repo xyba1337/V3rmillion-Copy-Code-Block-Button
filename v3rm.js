@@ -16,27 +16,60 @@
     let collection = document.getElementsByClassName("codeblock");
 
     for(let item of collection){
+        //create elements
         let zNode = document.createElement('div');
-        zNode.innerHTML = '<button id="myButton" type="button">'
-            + 'Copy Code</button>'
-        ;
         zNode.setAttribute('id', 'myContainer');
+
+        let copyButton = document.createElement('button');
+        let text = document.createTextNode('📋Copy Code');
+        copyButton.setAttribute('id', 'copyButton');
+        copyButton.appendChild(text);
+
+        let downloadButton = document.createElement('button');
+        let dtext = document.createTextNode('📥Download Code');
+        downloadButton.setAttribute('id', 'downloadButton');
+        downloadButton.appendChild(dtext);
+
+        zNode.appendChild(copyButton);
+        zNode.appendChild(downloadButton);
         item.appendChild(zNode);
         let codeblockInner = item.children[1].firstChild.innerText.replace(new RegExp(String.fromCharCode(160), "g"), " ");
 
-        zNode.onclick = function() {
+        downloadButton.onclick = function() {
+            const thread_title = document.querySelector(".thread_title").innerText;
+            const blob = new Blob([codeblockInner], {type: 'text'});
+            if(window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveBlob(blob, thread_title);
+            }
+            else{
+                const elem = window.document.createElement('a');
+                elem.href = window.URL.createObjectURL(blob);
+                elem.download = thread_title;
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+
+                fireCallback("Downloaded");
+            }
+        }
+
+        copyButton.onclick = function() {
             if (navigator.clipboard.writeText(codeblockInner)) {
-                var StatusNode = document.getElementById("status");
-                if (!StatusNode) {
-                    var newNode = document.createElement('p');
-                    newNode.id = "status";
-                    newNode.innerHTML = 'Code Copied!';
-                    zNode.appendChild(newNode);
-                }
-                setTimeout(() => $(zNode.childNodes[1]).fadeOut(500, function() { $(this).remove(); }), 500);
+                fireCallback("Copied");
             } else {
                 alert("something went wrong");
             }
+        }
+
+        function fireCallback(message) {
+            var StatusNode = document.getElementById("status");
+            if (!StatusNode) {
+                var newNode = document.createElement('p');
+                newNode.id = "status";
+                newNode.innerHTML = 'Code' + message + '!';
+                zNode.appendChild(newNode);
+            }
+            setTimeout(() => $(zNode.childNodes[2]).fadeOut(500, function() { $(this).remove(); }), 500);
         }
     }
 
@@ -44,11 +77,17 @@
        display: flex;
        margin-top: 10px;
    }
-   #myButton {
+   #copyButton, #downloadButton {
        cursor: pointer;
    }
+
+   #downloadButton {
+       margin-left: 8px;
+   }
+
    #myContainer p {
        color: green;
+       font-size: 1.8vh !important;
        margin: 4px 9px;
        -webkit-animation: fadein .5s; /* Safari, Chrome and Opera > 12.1 */
       -moz-animation: fadein .5s; /* Firefox < 16 */
