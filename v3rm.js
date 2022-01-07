@@ -87,7 +87,7 @@
 
    #myContainer p {
        color: green;
-       font-size: 1.8vh !important;
+       font-size: 1.7vh !important;
        margin: 4px 9px;
        -webkit-animation: fadein .5s; /* Safari, Chrome and Opera > 12.1 */
       -moz-animation: fadein .5s; /* Firefox < 16 */
